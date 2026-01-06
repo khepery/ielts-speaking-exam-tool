@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IELTS Listening Pro</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f0f4f8;
+  --card:#ffffff;
+  --border:#e1e7ef;
+  --text:#1e293b;
+  --text2:#64748b;
+  --text3:#94a3b8;
+  --accent:#4f46e5;
+  --accent-light:#eef2ff;
+  --success:#059669;
+  --success-light:#ecfdf5;
+  --error:#dc2626;
+  --error-light:#fef2f2;
+  --warn:#d97706;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 20px rgba(0,0,0,0.08);
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* Layout - larger center */
+.app{display:grid;grid-template-columns:200px 1fr 220px;grid-template-rows:54px 1fr;height:100vh}
+
+/* Header */
+.header{grid-column:1/-1;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;box-shadow:var(--shadow)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:var(--accent)}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 2px 8px rgba(79,70,229,0.3)}
+.hdr-btns{display:flex;gap:8px}
+
+/* Buttons */
+.btn{padding:8px 14px;font-size:12px;font-weight:600;border:1px solid var(--border);border-radius:8px;background:var(--card);cursor:pointer;color:var(--text);transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--bg);border-color:#cbd5e1;transform:translateY(-1px)}
+.btn-p{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-p:hover{background:#4338ca;border-color:#4338ca}
+.btn-s{background:var(--success);color:#fff;border-color:var(--success)}
+.btn-s:hover{background:#047857}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* Sidebar - narrower */
+.side{background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.side-hdr{padding:12px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center}
+.side-hdr span{background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:10px;font-size:10px}
+.side-search{padding:10px 12px;border-bottom:1px solid var(--border)}
+.side-search input{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:12px;background:var(--bg);transition:all .15s}
+.side-search input:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(79,70,229,0.1)}
+.exam-list{flex:1;overflow-y:auto;padding:8px}
+.exam-item{padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:6px;border:1px solid transparent;transition:all .15s}
+.exam-item:hover{background:var(--bg)}
+.exam-item.on{background:var(--accent-light);border-color:var(--accent)}
+.exam-item h4{font-size:12px;font-weight:600;margin-bottom:2px;color:var(--text)}
+.exam-item p{font-size:10px;color:var(--text2)}
+.exam-item .badge{display:inline-block;font-size:9px;padding:2px 6px;background:var(--bg);border-radius:4px;color:var(--text2);margin-top:4px}
+.exam-item.on .badge{background:rgba(79,70,229,0.15);color:var(--accent)}
+
+/* Main - larger */
+.main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg);padding:16px}
+
+.cover{height:130px;position:relative;border-radius:16px;overflow:hidden;flex-shrink:0;box-shadow:var(--shadow-lg)}
+.cover img{width:100%;height:100%;object-fit:cover}
+.cover-info{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.6),rgba(0,0,0,0.3));padding:20px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff}
+.cover-info h2{font-size:20px;font-weight:700;margin-bottom:4px;text-shadow:0 2px 4px rgba(0,0,0,0.2)}
+.cover-info p{font-size:12px;opacity:.9}
+.cover-stats{display:flex;gap:10px;margin-top:10px}
+.cover-stats span{font-size:11px;background:rgba(255,255,255,0.2);padding:4px 12px;border-radius:6px;backdrop-filter:blur(4px)}
+
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px;flex-wrap:wrap}
+.tabs{display:flex;gap:4px;background:var(--card);padding:4px;border-radius:10px;box-shadow:var(--shadow)}
+.tab{padding:8px 16px;font-size:12px;font-weight:600;border:none;background:transparent;color:var(--text2);border-radius:7px;cursor:pointer;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.on{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(79,70,229,0.3)}
+.timer{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:18px;font-weight:700;color:var(--accent);background:var(--card);padding:8px 16px;border-radius:10px;box-shadow:var(--shadow)}
+.toolbar-btns{display:flex;gap:8px;align-items:center}
+
+/* Transcript - larger area */
+.transcript-wrap{flex:1;background:var(--card);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.transcript-inner{flex:1;overflow-y:auto;padding:24px 28px}
+.transcript{font-size:15px;line-height:2;max-width:none}
+.transcript p{margin-bottom:14px}
+
+.bnum{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;font-size:10px;font-weight:700;border-radius:50%;margin-right:4px;vertical-align:middle;box-shadow:0 2px 4px rgba(79,70,229,0.3)}
+.binput{width:130px;padding:6px 12px;font-size:14px;border:2px solid var(--border);border-radius:8px;margin:0 4px;vertical-align:middle;transition:all .15s;background:#fff}
+.binput:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,0.1)}
+.binput.ok{border-color:var(--success);background:var(--success-light)}
+.binput.no{border-color:var(--error);background:var(--error-light)}
+.ans{color:var(--success);font-size:12px;font-weight:600;margin-left:6px;background:var(--success-light);padding:3px 10px;border-radius:6px}
+.study{display:inline-block;background:var(--accent-light);color:var(--accent);padding:4px 14px;border-radius:8px;font-weight:600;margin:0 3px;border:1px solid rgba(79,70,229,0.2)}
+
+.results{background:linear-gradient(135deg,#f8fafc,#f1f5f9);border:1px solid var(--border);border-radius:14px;padding:24px;margin:20px 28px;text-align:center}
+.results .big{font-size:48px;font-weight:800}
+.results .row{display:flex;justify-content:center;gap:40px;margin-top:16px}
+.results .item{text-align:center}
+.results .item .v{font-size:28px;font-weight:700}
+.results .item .l{font-size:11px;color:var(--text2);margin-top:2px}
+.results .item.ok .v{color:var(--success)}
+.results .item.no .v{color:var(--error)}
+
+/* Voice Panel - narrower but functional */
+.vpanel{background:var(--card);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.vsec{padding:12px 14px;border-bottom:1px solid var(--border)}
+.vsec-title{font-size:10px;font-weight:700;color:var(--text2);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.vsec-title .dot{width:6px;height:6px;border-radius:50%;background:var(--success)}
+
+.player{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px}
+.pbtn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .15s}
+.pbtn:hover{background:var(--bg);transform:scale(1.05)}
+.pbtn.play{width:44px;height:44px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;font-size:16px;box-shadow:0 4px 12px rgba(79,70,229,0.3)}
+.pbtn.play:hover{transform:scale(1.08)}
+.pbar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden}
+.pbar-fill{height:100%;background:linear-gradient(90deg,#4f46e5,#7c3aed);border-radius:2px;transition:width .2s}
+.pinfo{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:6px}
+
+.status{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border-radius:8px;font-size:11px;margin-top:10px}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--text3)}
+.sdot.on{background:var(--success);animation:pulse 1.5s infinite}
+.sdot.pause{background:var(--warn)}
+.sdot.err{background:var(--error)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.vfilters{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.vf{padding:5px 10px;font-size:10px;font-weight:600;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;color:var(--text2);transition:all .15s}
+.vf:hover,.vf.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.vlist{flex:1;overflow-y:auto;padding:8px 12px}
+.vitem{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:4px;border:2px solid transparent;transition:all .15s}
+.vitem:hover{background:var(--bg)}
+.vitem.on{background:var(--accent-light);border-color:var(--accent)}
+.vitem.online{position:relative}
+.vitem.online::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--success);border-radius:2px}
+
+.vq{font-size:8px;font-weight:700;padding:3px 6px;border-radius:4px;flex-shrink:0}
+.vq.natural{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000}
+.vq.good{background:var(--success-light);color:#047857}
+.vq.basic{background:var(--bg);color:var(--text3)}
+.vname{flex:1;font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vlang{font-size:9px;color:var(--text2);flex-shrink:0;background:var(--bg);padding:2px 6px;border-radius:4px}
+.vtest{padding:4px 8px;font-size:9px;font-weight:600;background:#fff;border:1px solid var(--border);border-radius:5px;cursor:pointer;transition:all .15s}
+.vtest:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.vset{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.vset label{font-size:11px;color:var(--text2);width:50px}
+.vset input[type=range]{flex:1;height:4px;-webkit-appearance:none;background:var(--bg);border-radius:2px}
+.vset input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;box-shadow:0 2px 4px rgba(79,70,229,0.3)}
+.vset .val{font-size:11px;font-weight:600;color:var(--accent);width:36px;text-align:right}
+
+/* Voice warning */
+.vwarn{background:var(--error-light);border:1px solid var(--error);border-radius:8px;padding:10px;font-size:11px;color:var(--error);text-align:center;margin:8px 12px}
+
+/* Modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);z-index:100;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:16px;width:90%;max-width:520px;max-height:85vh;overflow:auto;box-shadow:0 25px 50px rgba(0,0,0,0.25)}
+.modal-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-hdr h3{font-size:16px;font-weight:700}
+.modal-body{padding:20px}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:12px;font-weight:600;margin-bottom:6px;color:var(--text2)}
+.fg input,.fg textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-size:13px;transition:all .15s}
+.fg input:focus,.fg textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(79,70,229,0.1)}
+.fg textarea{min-height:140px;resize:vertical;line-height:1.6}
+.fg .hint{font-size:11px;color:var(--text2);margin-top:4px}
+.modal-ftr{padding:16px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);transition:transform .3s cubic-bezier(.34,1.56,.64,1);z-index:200}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--success)}
+.toast.err{background:var(--error)}
+
+/* Empty state */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text2);text-align:center;padding:40px}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:.5}
+.empty h3{font-size:16px;color:var(--text);margin-bottom:4px}
+.empty p{font-size:13px}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">🎧</div>
+      IELTS Listening Pro
+    </div>
+    <div class="hdr-btns">
+      <button class="btn" onclick="openModal()">+ Create</button>
+      <button class="btn" onclick="exportData()">Export</button>
+      <button class="btn" onclick="$('importFile').click()">Import</button>
+      <input type="file" id="importFile" accept=".json" hidden onchange="importData(event)">
+    </div>
+  </header>
+
+  <aside class="side">
+    <div class="side-hdr">Exams <span id="cnt">0</span></div>
+    <div class="side-search"><input id="q" placeholder="Search exams..." oninput="renderList()"></div>
+    <div class="exam-list" id="list"></div>
+  </aside>
+
+  <main class="main">
+    <div class="cover">
+      <img id="coverImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234f46e5'/%3E%3Cstop offset='100%25' stop-color='%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='200'/%3E%3C/svg%3E" alt="">
+      <div class="cover-info">
+        <h2 id="cTitle">Welcome</h2>
+        <p id="cDesc">Select an exam from the sidebar to begin</p>
+        <div class="cover-stats"><span id="cBlanks">0 blanks</span><span id="cType">—</span></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="tabs">
+        <button class="tab on" data-m="practice" onclick="setMode('practice')">📝 Practice</button>
+        <button class="tab" data-m="study" onclick="setMode('study')">📖 Study</button>
+        <button class="tab" data-m="listen" onclick="setMode('listen')">🎧 Listen</button>
+      </div>
+      <div class="toolbar-btns">
+        <div class="timer" id="timer">00:00</div>
+        <button class="btn btn-s" id="checkBtn" onclick="check()" style="display:none">✓ Check Answers</button>
+        <button class="btn" id="resetBtn" onclick="reset()" style="display:none">↺ Reset</button>
+        <button class="btn" id="delBtn" onclick="delExam()" style="display:none">🗑</button>
+      </div>
+    </div>
+
+    <div class="transcript-wrap">
+      <div class="transcript-inner">
+        <div class="transcript" id="transcript">
+          <div class="empty">
+            <div class="empty-icon">📚</div>
+            <h3>No exam selected</h3>
+            <p>Choose an exam from the sidebar to start practicing</p>
+          </div>
+        </div>
+      </div>
+      <div class="results" id="results" style="display:none">
+        <div class="big" id="pct">0%</div>
+        <div class="row">
+          <div class="item ok"><div class="v" id="okN">0</div><div class="l">Correct</div></div>
+          <div class="item no"><div class="v" id="noN">0</div><div class="l">Wrong</div></div>
+          <div class="item"><div class="v" id="totN">0</div><div class="l">Total</div></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <aside class="vpanel">
+    <div class="vsec">
+      <div class="vsec-title"><span class="dot" id="connDot"></span> Audio Player</div>
+      <div class="player">
+        <button class="pbtn" onclick="restart()" title="Restart">⏮</button>
+        <button class="pbtn" onclick="prev()" title="Previous">⏪</button>
+        <button class="pbtn play" id="playBtn" onclick="toggle()" title="Play/Pause">▶</button>
+        <button class="pbtn" onclick="next()" title="Next">⏩</button>
+        <button class="pbtn" onclick="stop()" title="Stop">⏹</button>
+      </div>
+      <div class="pbar"><div class="pbar-fill" id="pFill"></div></div>
+      <div class="pinfo"><span id="pChunk">0 / 0</span><span id="pStatus">Ready</span></div>
+      <div class="status"><span class="sdot" id="sDot"></span><span id="sMsg">Select a voice and press Play</span></div>
+    </div>
+
+    <div class="vsec">
+      <div class="vsec-title">🎙 Voice Selection</div>
+      <div class="vfilters">
+        <button class="vf on" data-f="all" onclick="filterV('all')">All</button>
+        <button class="vf" data-f="natural" onclick="filterV('natural')">⭐ Natural</button>
+        <button class="vf" data-f="en" onclick="filterV('en')">English</button>
+        <button class="vf" data-f="zh" onclick="filterV('zh')">中文</button>
+      </div>
+    </div>
+
+    <div class="vlist" id="vList">
+      <div style="padding:20px;text-align:center;color:var(--text2);font-size:11px">Loading voices...</div>
+    </div>
+
+    <div class="vsec">
+      <div class="vsec-title">⚙️ Settings</div>
+      <div class="vset">
+        <label>Speed</label>
+        <input type="range" id="rate" min="0.5" max="1.5" step="0.1" value="0.9" oninput="upSet()">
+        <span class="val" id="rateV">0.9x</span>
+      </div>
+      <div class="vset">
+        <label>Pitch</label>
+        <input type="range" id="pitch" min="0.5" max="1.5" step="0.1" value="1" oninput="upSet()">
+        <span class="val" id="pitchV">1.0</span>
+      </div>
+      <div class="vset">
+        <label>Volume</label>
+        <input type="range" id="vol" min="0.1" max="1" step="0.1" value="1" oninput="upSet()">
+        <span class="val" id="volV">100%</span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-hdr"><h3>Create New Exam</h3><button class="btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="fg"><label>Exam Title</label><input id="nTitle" placeholder="e.g., IELTS Practice Test 5"></div>
+      <div class="fg"><label>Transcript</label><textarea id="nText" placeholder="Paste your listening transcript here..."></textarea><div class="hint">💡 Wrap answers in [square brackets]. Example: The answer is [Paris].</div></div>
+    </div>
+    <div class="modal-ftr"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-p" onclick="saveExam()">💾 Save Exam</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+
+// Cover images
+const COVERS={
+  hospital:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ef4444'/%3E%3Cstop offset='100%25' stop-color='%23f97316'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='200'/%3E%3Ccircle cx='700' cy='40' r='80' fill='white' opacity='.08'/%3E%3Ccircle cx='100' cy='180' r='100' fill='white' opacity='.06'/%3E%3C/svg%3E",
+  education:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%232563eb'/%3E%3Cstop offset='100%25' stop-color='%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='200'/%3E%3Ccircle cx='700' cy='40' r='80' fill='white' opacity='.08'/%3E%3Ccircle cx='100' cy='180' r='100' fill='white' opacity='.06'/%3E%3C/svg%3E",
+  nature:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2316a34a'/%3E%3Cstop offset='100%25' stop-color='%2365a30d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='200'/%3E%3Ccircle cx='700' cy='40' r='80' fill='white' opacity='.08'/%3E%3Ccircle cx='100' cy='180' r='100' fill='white' opacity='.06'/%3E%3C/svg%3E",
+  museum:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23d97706'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='200'/%3E%3Ccircle cx='700' cy='40' r='80' fill='white' opacity='.08'/%3E%3Ccircle cx='100' cy='180' r='100' fill='white' opacity='.06'/%3E%3C/svg%3E",
+  custom:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='800' height='200'/%3E%3Ccircle cx='700' cy='40' r='80' fill='white' opacity='.08'/%3E%3Ccircle cx='100' cy='180' r='100' fill='white' opacity='.06'/%3E%3C/svg%3E"
+};
+
+// Built-in exam data
+const DATA=[
+  {id:'hospital',title:'Hospital Volunteering',cover:COVERS.hospital,cat:'Health',
+   text:`Good morning. Welcome to City Hospital's volunteer services.
+
+Hi, I'm interested in becoming a [volunteer] here. I saw your [advertisement] online.
+
+That's wonderful. All volunteers need to complete an [orientation] session. We hold orientations on the first [Saturday] of every month. The next one is on July [fifth]. You'll need to bring a [passport] or driver's license.
+
+What kind of tasks would I be doing?
+
+Many work at the [information desk], directing visitors to different departments. Others assist in the [cafeteria] during lunch hours. Some volunteers help transport patients in [wheelchairs]. We also have volunteers who provide [companionship] to patients.
+
+Are there any requirements?
+
+You need to be at least [eighteen] years old and commit to a minimum of [four] hours per week for at least [six] months. We also require a [background check] and health screening.
+
+What shifts do you need the most help with?
+
+Currently, we need the most help on [weekday] mornings and [Sunday] afternoons.`},
+
+  {id:'housing',title:'Student Housing',cover:COVERS.education,cat:'Education',
+   text:`Student Housing Office, how may I help you?
+
+Hello, I'm calling to inquire about [accommodation] options for next semester. I'm an international student from [Malaysia].
+
+Of course. We have three types of accommodation: halls of [residence] on campus, shared [apartments] near the university, and [homestay] options with local families.
+
+What's the difference in terms of cost?
+
+The halls of residence are around [six hundred] pounds per month, including utilities. Shared apartments range from [seven hundred] to eight hundred fifty pounds. Homestay is approximately [seven fifty] pounds, which includes [breakfast] and dinner.
+
+What about the application process?
+
+For halls of residence, you need to apply through our [online] portal by March [fifteenth]. You'll need to pay a [deposit] of two hundred pounds to secure your place.
+
+Is there a preference given to certain students?
+
+Yes, [first-year] students and those with [medical] conditions are given priority for halls of residence.
+
+What facilities are included in the halls?
+
+Each room has a single bed, a desk, a [wardrobe], and [internet] connection. Bathrooms are shared between [four] to six students. There's a communal [kitchen] on each floor, and a [laundry] room in the basement.`},
+
+  {id:'mushrooms',title:'Wild Mushrooms Guide',cover:COVERS.nature,cat:'Nature',
+   text:`This evening we're delighted to welcome Dan Beagle, who's written a book about finding food in the wild. He's going to tell us about picking wild [mushrooms].
+
+Thank you very much. I need to start by talking about [safety]. You really need to know what you're doing because some mushrooms are extremely [poisonous].
+
+Having said that, it's really worth doing for the amazing [variety] of mushrooms available, which you can't get in the shops.
+
+But you have to be very careful. I always say you should never consume mushrooms picked by [friends] or neighbours. Some poisonous mushrooms look very similar to edible ones and it's easy for people to get [confused].
+
+Also avoid mushrooms growing beside [busy roads] for obvious reasons. But nothing beats the [taste] of freshly picked mushrooms.
+
+Don't listen to people who tell you that it's only OK to eat mushrooms that are [pale] or dull. This is completely untrue. Some edible mushrooms are [bright red], for example.
+
+Another thing to remember is that you can't tell if a mushroom is safe to eat by its [smell]. Some of the most deadly mushrooms have no smell at all.
+
+If you're a complete beginner, there are some really good [phone apps] for identifying mushrooms, but you can't always rely on getting a good [signal] in the middle of a wood. If possible, you should go with a group led by an [expert].`},
+
+  {id:'museum',title:'Farming Museum Tour',cover:COVERS.museum,cat:'Culture',
+   text:`Good morning everyone, and welcome to the Museum of Farming Life. Let me give you some [background] information about the museum.
+
+This building was constructed in [1880] as the home of a local [businessman], Alfred Palmer, of the Palmer biscuit factory.
+
+It was later sold and became a hall of residence for [students] in 1911, and a [museum] in 1951. In 2005, a modern [extension] was built to accommodate the museum's collections.
+
+The museum is owned by the [university], and apart from two rooms that are our [offices], the university uses the main part of the building.
+
+The [interior] architectural features are outstanding, especially the room that used to be the [library].
+
+Luckily, we've managed to keep entry to the museum [free]. This includes access to all the galleries, outdoor areas and special exhibitions.
+
+We do have a [donation] box just over there. We also have a [cloakroom] if you'd like to leave your coats and bags somewhere.
+
+Unlike other museums, [photography] is allowed here.
+
+Just inside, we have an area called [Four Seasons]. Here you can watch a four-minute [animation] of a woodland scene.
+
+The main gallery is called [Town and Country]. It includes a photographic collection of prizewinning [sheep] and shepherds.`}
+];
+
+// State
+let exams=[], cur=null, mode='practice', ans={}, correct=[], timerInt=null, timerSec=0;
+
+// TTS State
+const synth = window.speechSynthesis;
+let voices=[], selVoice=null, vFilter='all';
+let chunks=[], chunkI=0, playing=false, paused=false;
+let utterance=null, resumeTimer=null;
+
+// ============== INIT ==============
+function init(){
+  loadExams();
+  renderList();
+  initVoices();
+  loadSet();
+  
+  // Keyboard shortcuts
+  document.addEventListener('keydown', e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') return;
+    if(e.code==='Space'){e.preventDefault();toggle();}
+    if(e.code==='ArrowLeft'){e.preventDefault();prev();}
+    if(e.code==='ArrowRight'){e.preventDefault();next();}
+    if(e.code==='KeyR'){e.preventDefault();restart();}
+  });
+}
+
+function loadExams(){
+  const c=JSON.parse(localStorage.getItem('ielts_ex')||'[]');
+  exams=[...DATA.map(e=>({...e,type:'b'})), ...c.map(e=>({...e,type:'c',cover:COVERS.custom}))];
+  $('cnt').textContent=exams.length;
+}
+
+function renderList(){
+  const q=$('q').value.toLowerCase();
+  const f=exams.filter(e=>e.title.toLowerCase().includes(q));
+  $('list').innerHTML=f.map(e=>{
+    const b=(e.text.match(/\[[^\]]+\]/g)||[]).length;
+    return`<div class="exam-item${cur?.id===e.id?' on':''}" onclick="sel('${e.id}')">
+      <h4>${e.title}</h4>
+      <p>${e.cat} • ${b} blanks</p>
+      <span class="badge">${e.type==='c'?'✨ Custom':'📚 Built-in'}</span>
+    </div>`;
+  }).join('');
+}
+
+// ============== EXAM SELECTION ==============
+function sel(id){
+  stop();
+  cur=exams.find(e=>e.id===id);
+  if(!cur) return;
+  
+  // Parse correct answers
+  correct=[];
+  const re=/\[([^\]]+)\]/g;
+  let m;
+  while((m=re.exec(cur.text))) correct.push(m[1].toLowerCase().trim());
+  
+  // Update UI
+  $('coverImg').src=cur.cover;
+  $('cTitle').textContent=cur.title;
+  $('cDesc').textContent=cur.cat+' • IELTS Listening Practice';
+  $('cBlanks').textContent=correct.length+' blanks';
+  $('cType').textContent=cur.type==='c'?'✨ Custom':'📚 Built-in';
+  $('delBtn').style.display=cur.type==='c'?'inline-flex':'none';
+  
+  // Reset state
+  ans={};
+  timerSec=0;
+  $('timer').textContent='00:00';
+  $('results').style.display='none';
+  $('checkBtn').disabled=false;
+  
+  render();
+  buildChunks();
+  renderList();
+  toast('Exam loaded! Press ▶ to play');
+}
+
+function setMode(m){
+  mode=m;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.m===m));
+  ans={};
+  $('results').style.display='none';
+  $('checkBtn').disabled=false;
+  render();
+}
+
+function render(){
+  const el=$('transcript');
+  if(!cur){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📚</div><h3>No exam selected</h3><p>Choose an exam from the sidebar to start practicing</p></div>`;
+    $('checkBtn').style.display='none';
+    $('resetBtn').style.display='none';
+    return;
+  }
+  
+  let h=cur.text, n=0;
+  
+  if(mode==='practice'){
+    h=h.replace(/\[([^\]]+)\]/g,()=>{
+      n++;
+      return`<span class="bnum">${n}</span><input class="binput" data-n="${n}" value="${ans[n]||''}" oninput="ans[${n}]=this.value" placeholder="...">`;
+    });
+    $('checkBtn').style.display='inline-flex';
+    $('resetBtn').style.display='inline-flex';
+    startTimer();
+  } else if(mode==='study'){
+    h=h.replace(/\[([^\]]+)\]/g,(_,a)=>`<span class="study">${a}</span>`);
+    $('checkBtn').style.display='none';
+    $('resetBtn').style.display='none';
+    stopTimer();
+  } else {
+    h=h.replace(/\[([^\]]+)\]/g,'$1');
+    $('checkBtn').style.display='none';
+    $('resetBtn').style.display='none';
+    stopTimer();
+  }
+  
+  el.innerHTML=h.split('\n\n').map(p=>`<p>${p}</p>`).join('');
+}
+
+// ============== ANSWER CHECKING ==============
+function check(){
+  if(!cur||mode!=='practice') return;
+  stopTimer();
+  
+  let ok=0;
+  document.querySelectorAll('.binput').forEach(inp=>{
+    const n=+inp.dataset.n;
+    const u=(inp.value||'').toLowerCase().trim();
+    const a=correct[n-1];
+    
+    inp.classList.remove('ok','no');
+    const old=inp.nextElementSibling;
+    if(old?.classList.contains('ans')) old.remove();
+    
+    if(u===a){
+      inp.classList.add('ok');
+      ok++;
+    } else {
+      inp.classList.add('no');
+      const s=document.createElement('span');
+      s.className='ans';
+      s.textContent='→ '+correct[n-1];
+      inp.after(s);
+    }
+  });
+  
+  const t=correct.length;
+  const p=Math.round(ok/t*100);
+  
+  $('results').style.display='block';
+  $('pct').textContent=p+'%';
+  $('pct').style.color=p>=70?'var(--success)':p>=50?'var(--warn)':'var(--error)';
+  $('okN').textContent=ok;
+  $('noN').textContent=t-ok;
+  $('totN').textContent=t;
+  
+  $('checkBtn').disabled=true;
+  toast(p>=70?'Excellent! '+p+'%':p>=50?'Good job! '+p+'%':p+'% - Keep practicing!', p>=70?'ok':'');
+}
+
+function reset(){
+  ans={};
+  timerSec=0;
+  $('timer').textContent='00:00';
+  $('results').style.display='none';
+  $('checkBtn').disabled=false;
+  render();
+  toast('Reset!');
+}
+
+function startTimer(){
+  stopTimer();
+  timerInt=setInterval(()=>{
+    timerSec++;
+    const m=String(Math.floor(timerSec/60)).padStart(2,'0');
+    const s=String(timerSec%60).padStart(2,'0');
+    $('timer').textContent=m+':'+s;
+  },1000);
+}
+
+function stopTimer(){
+  if(timerInt){clearInterval(timerInt);timerInt=null;}
+}
+
+// ============== VOICE SYSTEM - IMPROVED ==============
+function initVoices(){
+  // Try multiple times to load voices (browser compatibility)
+  const loadVoices=()=>{
+    voices=synth.getVoices();
+    if(voices.length>0) renderV();
+  };
+  
+  loadVoices();
+  synth.addEventListener('voiceschanged', loadVoices);
+  
+  // Fallback attempts for Edge/Chrome
+  setTimeout(loadVoices, 100);
+  setTimeout(loadVoices, 500);
+  setTimeout(loadVoices, 1000);
+}
+
+function getVoiceQuality(v){
+  const n=v.name.toLowerCase();
+  const l=v.lang.toLowerCase();
+  
+  // Natural/Neural voices (highest quality)
+  if(n.includes('natural')||n.includes('neural')||n.includes('wavenet')||n.includes('enhanced')||n.includes('premium')) return 'natural';
+  
+  // Good quality online voices
+  if(n.includes('google')&&!n.includes('espeak')) return 'good';
+  if(n.includes('microsoft')&&(n.includes('online')||n.includes('david')||n.includes('zira')||n.includes('mark')||n.includes('hazel'))) return 'good';
+  
+  // Known good voices by name
+  const goodNames=['samantha','alex','daniel','karen','moira','tessa','fiona','veena','tingting','sinji','meijia','yuna'];
+  if(goodNames.some(g=>n.includes(g))) return 'good';
+  
+  // Bad quality voices to filter out
+  if(n.includes('espeak')||n.includes('festival')||n.includes('flite')||n.includes('mbrola')) return 'bad';
+  
+  return 'basic';
+}
+
+function isOnlineVoice(v){
+  const n=v.name.toLowerCase();
+  return n.includes('google')||n.includes('online')||n.includes('cloud')||n.includes('neural')||n.includes('wavenet');
+}
+
+function renderV(){
+  const el=$('vList');
+  
+  if(voices.length===0){
+    el.innerHTML='<div class="vwarn">⚠️ No voices found. Please check your browser settings or try Chrome/Edge.</div>';
+    return;
+  }
+  
+  // Filter to English and Chinese only
+  let list=voices.filter(v=>{
+    const l=v.lang.toLowerCase();
+    return l.startsWith('en')||l.startsWith('zh')||l.includes('chinese')||l.includes('cmn')||l.includes('yue');
+  });
+  
+  // Remove bad quality
+  list=list.filter(v=>getVoiceQuality(v)!=='bad');
+  
+  // Apply user filter
+  if(vFilter==='natural') list=list.filter(v=>getVoiceQuality(v)==='natural'||getVoiceQuality(v)==='good');
+  else if(vFilter==='en') list=list.filter(v=>v.lang.toLowerCase().startsWith('en'));
+  else if(vFilter==='zh') list=list.filter(v=>{
+    const l=v.lang.toLowerCase();
+    return l.startsWith('zh')||l.includes('chinese')||l.includes('cmn')||l.includes('yue');
+  });
+  
+  // Sort by quality
+  const ord={natural:0,good:1,basic:2};
+  list.sort((a,b)=>ord[getVoiceQuality(a)]-ord[getVoiceQuality(b)]);
+  
+  if(list.length===0){
+    el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text2);font-size:11px">No voices match this filter</div>';
+    return;
+  }
+  
+  // Auto-select best voice
+  if(!selVoice||!list.find(v=>v.name===selVoice.name)){
+    selVoice=list[0];
+  }
+  
+  el.innerHTML=list.slice(0,15).map(v=>{
+    const q=getVoiceQuality(v);
+    const on=selVoice?.name===v.name;
+    const online=isOnlineVoice(v);
+    const shortName=v.name.replace(/Microsoft |Google |Apple |com\.apple\./g,'').substring(0,20);
+    
+    return`<div class="vitem${on?' on':''}${online?' online':''}" onclick="pickV('${v.name.replace(/'/g,"\\'")}')">
+      <span class="vq ${q}">${q==='natural'?'⭐ Natural':q==='good'?'✓ Good':'Basic'}</span>
+      <span class="vname">${shortName}</span>
+      <span class="vlang">${v.lang}</span>
+      <button class="vtest" onclick="event.stopPropagation();testV('${v.name.replace(/'/g,"\\'")}')">Test</button>
+    </div>`;
+  }).join('');
+  
+  // Update connection indicator
+  $('connDot').style.background=selVoice?'var(--success)':'var(--text3)';
+}
+
+function filterV(f){
+  vFilter=f;
+  document.querySelectorAll('.vf').forEach(b=>b.classList.toggle('on',b.dataset.f===f));
+  renderV();
+}
+
+function pickV(name){
+  selVoice=voices.find(v=>v.name===name);
+  renderV();
+  saveSet();
+  toast('Voice: '+name.substring(0,25));
+}
+
+function testV(name){
+  synth.cancel();
+  const v=voices.find(x=>x.name===name);
+  if(!v){toast('Voice not found','err');return;}
+  
+  const u=new SpeechSynthesisUtterance('Hello! This is a voice test. The quick brown fox jumps over the lazy dog.');
+  u.voice=v;
+  u.rate=+$('rate').value;
+  u.pitch=+$('pitch').value;
+  u.volume=+$('vol').value;
+  
+  u.onerror=(e)=>{
+    console.error('Voice test error:',e);
+    toast('Voice error - try another','err');
+  };
+  
+  synth.speak(u);
+}
+
+// ============== AUDIO PLAYBACK - IMPROVED ==============
+function buildChunks(){
+  if(!cur){chunks=[];return;}
+  
+  const text=cur.text.replace(/\[([^\]]+)\]/g,'$1');
+  const sentences=text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[text];
+  
+  chunks=[];
+  let buf='';
+  
+  // Smaller chunks for better Chrome compatibility
+  sentences.forEach(s=>{
+    s=s.trim();
+    if(!s) return;
+    if((buf+' '+s).length>150){
+      if(buf) chunks.push(buf.trim());
+      buf=s;
+    } else {
+      buf=buf?buf+' '+s:s;
+    }
+  });
+  if(buf) chunks.push(buf.trim());
+  
+  chunkI=0;
+  upProg();
+}
+
+function toggle(){
+  if(playing&&!paused) pause();
+  else if(paused) resume();
+  else start();
+}
+
+function start(){
+  if(!selVoice){
+    toast('Please select a voice first','err');
+    return;
+  }
+  if(chunks.length===0){
+    toast('Load an exam first','err');
+    return;
+  }
+  
+  playing=true;
+  paused=false;
+  upBtn();
+  speak();
+}
+
+function speak(){
+  if(!playing||chunkI>=chunks.length){
+    if(chunkI>=chunks.length){
+      stop();
+      toast('Playback complete!','ok');
+    }
+    return;
+  }
+  
+  // Cancel any existing speech
+  synth.cancel();
+  clearTimeout(resumeTimer);
+  
+  utterance=new SpeechSynthesisUtterance(chunks[chunkI]);
+  utterance.voice=selVoice;
+  utterance.rate=+$('rate').value;
+  utterance.pitch=+$('pitch').value;
+  utterance.volume=+$('vol').value;
+  
+  utterance.onstart=()=>{
+    upStatus('Playing...','on');
+    // Chrome bug workaround - keep speech alive
+    startResumeTimer();
+  };
+  
+  utterance.onend=()=>{
+    clearTimeout(resumeTimer);
+    if(!playing||paused) return;
+    chunkI++;
+    upProg();
+    // Small delay between chunks for naturalness
+    setTimeout(speak,200);
+  };
+  
+  utterance.onerror=(e)=>{
+    console.error('Speech error:',e);
+    clearTimeout(resumeTimer);
+    if(e.error==='interrupted') return; // Normal when stopping
+    upStatus('Error - retrying...','err');
+    // Retry after a moment
+    setTimeout(()=>{
+      if(playing&&!paused) speak();
+    },500);
+  };
+  
+  synth.speak(utterance);
+  upProg();
+}
+
+// Chrome bug: speech stops after ~15s if not interacted with
+function startResumeTimer(){
+  clearTimeout(resumeTimer);
+  resumeTimer=setInterval(()=>{
+    if(playing&&!paused&&synth.speaking){
+      synth.pause();
+      synth.resume();
+    }
+  },10000);
+}
+
+function pause(){
+  paused=true;
+  synth.pause();
+  clearTimeout(resumeTimer);
+  upBtn();
+  upStatus('Paused','pause');
+}
+
+function resume(){
+  paused=false;
+  synth.resume();
+  startResumeTimer();
+  upBtn();
+  upStatus('Playing...','on');
+}
+
+function stop(){
+  synth.cancel();
+  clearTimeout(resumeTimer);
+  playing=false;
+  paused=false;
+  chunkI=0;
+  upBtn();
+  upProg();
+  upStatus('Stopped','');
+}
+
+function restart(){
+  chunkI=0;
+  if(playing){
+    synth.cancel();
+    speak();
+  }
+  upProg();
+}
+
+function prev(){
+  if(chunkI>0) chunkI--;
+  if(playing&&!paused){
+    synth.cancel();
+    speak();
+  }
+  upProg();
+}
+
+function next(){
+  if(chunkI<chunks.length-1) chunkI++;
+  if(playing&&!paused){
+    synth.cancel();
+    speak();
+  }
+  upProg();
+}
+
+function upBtn(){
+  $('playBtn').textContent=playing&&!paused?'⏸':'▶';
+  $('pStatus').textContent=playing&&!paused?'Playing':paused?'Paused':'Ready';
+}
+
+function upProg(){
+  const t=chunks.length||1;
+  $('pFill').style.width=((chunkI+1)/t*100)+'%';
+  $('pChunk').textContent=(chunkI+1)+' / '+t;
+}
+
+function upStatus(msg,state){
+  $('sMsg').textContent=msg;
+  $('sDot').className='sdot'+(state?' '+state:'');
+}
+
+// ============== SETTINGS ==============
+function upSet(){
+  $('rateV').textContent=(+$('rate').value).toFixed(1)+'x';
+  $('pitchV').textContent=(+$('pitch').value).toFixed(1);
+  $('volV').textContent=Math.round(+$('vol').value*100)+'%';
+  saveSet();
+}
+
+function saveSet(){
+  localStorage.setItem('ielts_set',JSON.stringify({
+    rate:$('rate').value,
+    pitch:$('pitch').value,
+    vol:$('vol').value,
+    voice:selVoice?.name
+  }));
+}
+
+function loadSet(){
+  const s=JSON.parse(localStorage.getItem('ielts_set')||'{}');
+  if(s.rate) $('rate').value=s.rate;
+  if(s.pitch) $('pitch').value=s.pitch;
+  if(s.vol) $('vol').value=s.vol;
+  upSet();
+  
+  // Restore voice selection after voices load
+  const restoreVoice=()=>{
+    if(s.voice&&voices.length>0){
+      const v=voices.find(x=>x.name===s.voice);
+      if(v){selVoice=v;renderV();}
+    }
+  };
+  setTimeout(restoreVoice,200);
+  setTimeout(restoreVoice,600);
+  setTimeout(restoreVoice,1200);
+}
+
+// ============== CRUD ==============
+function openModal(){$('modal').classList.add('show');}
+function closeModal(){$('modal').classList.remove('show');}
+
+function saveExam(){
+  const t=$('nTitle').value.trim();
+  const x=$('nText').value.trim();
+  if(!t||!x){toast('Please fill all fields','err');return;}
+  const blanks=(x.match(/\[[^\]]+\]/g)||[]).length;
+  if(!blanks){toast('Add at least one [blank]','err');return;}
+  
+  const c=JSON.parse(localStorage.getItem('ielts_ex')||'[]');
+  const e={id:'c'+Date.now(),title:t,text:x,cat:'Custom'};
+  c.push(e);
+  localStorage.setItem('ielts_ex',JSON.stringify(c));
+  
+  loadExams();
+  renderList();
+  closeModal();
+  sel(e.id);
+  
+  $('nTitle').value='';
+  $('nText').value='';
+  toast('Exam created!','ok');
+}
+
+function delExam(){
+  if(!cur||cur.type!=='c') return;
+  if(!confirm('Delete this exam?')) return;
+  
+  let c=JSON.parse(localStorage.getItem('ielts_ex')||'[]');
+  c=c.filter(e=>e.id!==cur.id);
+  localStorage.setItem('ielts_ex',JSON.stringify(c));
+  
+  cur=null;
+  loadExams();
+  renderList();
+  render();
+  toast('Deleted');
+}
+
+function exportData(){
+  const c=JSON.parse(localStorage.getItem('ielts_ex')||'[]');
+  if(!c.length){toast('No custom exams to export','err');return;}
+  const blob=new Blob([JSON.stringify(c,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='ielts-exams.json';
+  a.click();
+  toast('Exported!','ok');
+}
+
+function importData(e){
+  const f=e.target.files[0];
+  if(!f) return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const d=JSON.parse(ev.target.result);
+      if(!Array.isArray(d)) throw 0;
+      const ex=JSON.parse(localStorage.getItem('ielts_ex')||'[]');
+      localStorage.setItem('ielts_ex',JSON.stringify([...ex,...d]));
+      loadExams();
+      renderList();
+      toast('Imported '+d.length+' exams!','ok');
+    }catch{toast('Invalid file format','err');}
+  };
+  r.readAsText(f);
+  e.target.value='';
+}
+
+function toast(m,t=''){
+  const el=$('toast');
+  el.textContent=m;
+  el.className='toast show'+(t?' '+t:'');
+  setTimeout(()=>el.classList.remove('show'),2500);
+}
+
+// Start
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
